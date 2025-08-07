@@ -1,183 +1,269 @@
 {% extends "base.html" %}
 
-{% block title %}웰니스 리트리트 뉴스레터{% endblock %}
+{% block title %}Wellness Sanctuary - Your Digital Retreat{% endblock %}
 
 {% block content %}
-<div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50" x-data="simplePage()">
-    <!-- 헤더 섹션 -->
-    <div class="bg-white shadow-sm border-b">
-        <div class="max-w-6xl mx-auto px-4 py-6">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold text-gray-900 mb-2">
-                    🧘 웰니스 리트리트 뉴스레터
+<div class="wellness-sanctuary" x-data="luxuryWellnessSanctuary()">
+    
+    <!-- 아만 호텔급 히어로 섹션 -->
+    <header class="sanctuary-hero">
+        <!-- 배경 그라데이션 -->
+        <div class="hero-background">
+            <div class="gradient-overlay"></div>
+            <div class="floating-particles"></div>
+        </div>
+        
+        <!-- 히어로 콘텐츠 -->
+        <div class="hero-content">
+            <div class="hero-text breathing-element">
+                <h1 class="hero-title">
+                    Wellness Sanctuary
                 </h1>
-                <p class="text-gray-600 mb-6">
-                    마음과 몸의 평화를 찾는 여정, 가장 좋은 웰니스 정보를 한 곳에서
+                <p class="hero-subtitle">
+                    Your Digital Retreat for Mindful Living
                 </p>
-                
-                <!-- 수집 버튼 -->
+                <p class="hero-description">
+                    마음과 몸의 평화를 찾는 여정, 세상에서 가장 아름다운 웰니스 경험을 한 곳에서
+                </p>
+            </div>
+            
+            <!-- 프리미엄 액션 버튼 -->
+            <div class="hero-actions">
                 <button @click="collectNewsletters()" 
                         :disabled="collecting"
-                        :class="collecting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'"
-                        class="bg-green-500 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-200 flex items-center space-x-2 mx-auto">
-                    <svg x-show="collecting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    <svg x-show="!collecting" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                    </svg>
-                    <span x-text="collecting ? '새로운 정보 수집중...' : '최신 정보 수집하기'"></span>
+                        class="sanctuary-cta ripple-button"
+                        :class="collecting ? 'collecting' : ''">
+                    <span class="cta-icon">
+                        <svg x-show="collecting" class="meditation-loader" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="2"/>
+                            <path d="M22 12c0-5.523-4.477-10-10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <svg x-show="!collecting" class="sanctuary-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                        </svg>
+                    </span>
+                    <span class="cta-text" x-text="collecting ? 'Curating New Journeys...' : 'Discover New Journeys'"></span>
                 </button>
                 
                 <!-- 수집 결과 표시 -->
-                <div x-show="collectResult" x-transition class="mt-4 p-3 rounded-lg mx-auto max-w-md" 
-                     :class="collectResult?.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'">
-                    <div class="flex items-center justify-center">
-                        <svg x-show="collectResult?.success" class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div x-show="collectResult" x-transition class="collection-feedback" 
+                     :class="collectResult?.success ? 'success' : 'error'">
+                    <div class="feedback-content">
+                        <svg x-show="collectResult?.success" class="feedback-icon" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                         </svg>
-                        <svg x-show="!collectResult?.success" class="h-5 w-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg x-show="!collectResult?.success" class="feedback-icon" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
                         </svg>
-                        <span class="text-sm font-medium" :class="collectResult?.success ? 'text-green-800' : 'text-red-800'" x-text="collectResult?.message"></span>
+                        <span class="feedback-message" x-text="collectResult?.message"></span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        
+        <!-- 스크롤 인디케이터 -->
+        <div class="scroll-indicator breathing-element">
+            <div class="scroll-line"></div>
+            <div class="scroll-dot"></div>
+        </div>
+    </header>
 
-    <!-- 통계 섹션 -->
-    <div class="max-w-6xl mx-auto px-4 py-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600" x-text="stats.total || 0"></div>
-                <div class="text-sm text-gray-600">총 뉴스레터</div>
-            </div>
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <div class="text-2xl font-bold text-green-600" x-text="stats.active_sources || 0"></div>
-                <div class="text-sm text-gray-600">활성 소스</div>
-            </div>
-            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
-                <div class="text-2xl font-bold text-purple-600" x-text="stats.last_updated || '수집 대기중'"></div>
-                <div class="text-sm text-gray-600">마지막 업데이트</div>
+    <!-- 통계 섹션 - 아만 스타일 -->
+    <section class="sanctuary-stats">
+        <div class="stats-container">
+            <div class="stats-grid fade-in-up">
+                <div class="stat-card breathing-element">
+                    <div class="stat-number" x-text="stats.total || 0"></div>
+                    <div class="stat-label">Curated Experiences</div>
+                    <div class="stat-description">정제된 웰니스 경험</div>
+                </div>
+                <div class="stat-card breathing-element">
+                    <div class="stat-number" x-text="stats.active_sources || 0"></div>
+                    <div class="stat-label">Trusted Sources</div>
+                    <div class="stat-description">신뢰할 수 있는 소스</div>
+                </div>
+                <div class="stat-card breathing-element">
+                    <div class="stat-time" x-text="stats.last_updated || 'Cultivating...'"></div>
+                    <div class="stat-label">Last Curated</div>
+                    <div class="stat-description">마지막 큐레이션</div>
+                </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- 카테고리별 뉴스레터 섹션 -->
-    <div class="max-w-6xl mx-auto px-4 pb-12">
+    <!-- 카테고리별 뉴스레터 섹션 - 아만 스타일 -->
+    <main class="sanctuary-content">
         <!-- 🧘 마음 웰니스 -->
-        <div class="mb-12">
-            <div class="flex items-center mb-6">
-                <div class="text-3xl mr-3">🧘</div>
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">마음 웰니스</h2>
-                    <p class="text-gray-600">명상, 마인드풀니스, 정신건강을 위한 정보</p>
-                </div>
-                <div class="ml-auto bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
-                    <span x-text="newsletters.mind_wellness?.length || 0"></span>개
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                <template x-for="newsletter in newsletters.mind_wellness" :key="newsletter.id">
-                    <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2" x-text="newsletter.title"></h3>
-                            <p class="text-sm text-gray-600 mb-3 line-clamp-3" x-text="newsletter.summary"></p>
-                            <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
-                                <span x-text="newsletter.source"></span>
-                                <span>⭐ <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span></span>
-                            </div>
-                            <a :href="newsletter.source_url" target="_blank" 
-                               class="w-full bg-blue-500 text-white py-2 px-3 rounded text-sm font-medium hover:bg-blue-600 transition-colors block text-center">
-                                자세히 보기 →
-                            </a>
-                        </div>
+        <section class="category-section mind-wellness fade-in-up">
+            <div class="category-container">
+                <header class="category-header breathing-element">
+                    <div class="category-icon">🧘</div>
+                    <div class="category-text">
+                        <h2 class="category-title">Mind Wellness</h2>
+                        <p class="category-subtitle">Journey to Inner Peace</p>
+                        <p class="category-description">명상, 마인드풀니스, 정신건강을 위한 깊은 여정</p>
                     </div>
-                </template>
+                    <div class="category-badge">
+                        <span x-text="newsletters.mind_wellness?.length || 0"></span>
+                        <span>Experiences</span>
+                    </div>
+                </header>
+                
+                <div class="wellness-grid mind-grid">
+                    <template x-for="newsletter in newsletters.mind_wellness" :key="newsletter.id">
+                        <article class="wellness-card premium-card mind-card">
+                            <div class="card-content">
+                                <h3 class="card-title" x-text="newsletter.title"></h3>
+                                <p class="card-excerpt" x-text="newsletter.summary"></p>
+                                
+                                <footer class="card-meta">
+                                    <span class="card-source" x-text="newsletter.source"></span>
+                                    <div class="card-quality">
+                                        <span class="quality-star">✦</span>
+                                        <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span>
+                                    </div>
+                                </footer>
+                            </div>
+                            
+                            <div class="card-hover-overlay">
+                                <a :href="newsletter.source_url" target="_blank" class="card-action">
+                                    <span>Explore</span>
+                                    <svg class="sanctuary-icon" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </article>
+                    </template>
+                </div>
+                
+                <div x-show="!newsletters.mind_wellness || newsletters.mind_wellness.length === 0" class="empty-state">
+                    <div class="empty-icon">🧘</div>
+                    <p class="empty-text">Your mind wellness journey awaits...</p>
+                    <p class="empty-subtext">새로운 정신적 평화의 여정을 기다리고 있습니다</p>
+                </div>
             </div>
-            <div x-show="!newsletters.mind_wellness || newsletters.mind_wellness.length === 0" class="text-center py-8 text-gray-500">
-                아직 마음 웰니스 뉴스레터가 없습니다. 수집 버튼을 눌러주세요! 🧘
-            </div>
-        </div>
+        </section>
 
         <!-- 💪 몸 웰니스 -->
-        <div class="mb-12">
-            <div class="flex items-center mb-6">
-                <div class="text-3xl mr-3">💪</div>
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">몸 웰니스</h2>
-                    <p class="text-gray-600">요가, 운동, 영양 관리를 위한 정보</p>
-                </div>
-                <div class="ml-auto bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                    <span x-text="newsletters.body_wellness?.length || 0"></span>개
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                <template x-for="newsletter in newsletters.body_wellness" :key="newsletter.id">
-                    <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2" x-text="newsletter.title"></h3>
-                            <p class="text-sm text-gray-600 mb-3 line-clamp-3" x-text="newsletter.summary"></p>
-                            <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
-                                <span x-text="newsletter.source"></span>
-                                <span>⭐ <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span></span>
-                            </div>
-                            <a :href="newsletter.source_url" target="_blank" 
-                               class="w-full bg-green-500 text-white py-2 px-3 rounded text-sm font-medium hover:bg-green-600 transition-colors block text-center">
-                                자세히 보기 →
-                            </a>
-                        </div>
+        <section class="category-section body-wellness fade-in-up">
+            <div class="category-container">
+                <header class="category-header breathing-element">
+                    <div class="category-icon">💪</div>
+                    <div class="category-text">
+                        <h2 class="category-title">Body Wellness</h2>
+                        <p class="category-subtitle">Strength & Vitality</p>
+                        <p class="category-description">요가, 운동, 영양으로 이루는 건강한 삶의 활력</p>
                     </div>
-                </template>
+                    <div class="category-badge">
+                        <span x-text="newsletters.body_wellness?.length || 0"></span>
+                        <span>Experiences</span>
+                    </div>
+                </header>
+                
+                <div class="wellness-grid body-grid">
+                    <template x-for="newsletter in newsletters.body_wellness" :key="newsletter.id">
+                        <article class="wellness-card premium-card body-card">
+                            <div class="card-content">
+                                <h3 class="card-title" x-text="newsletter.title"></h3>
+                                <p class="card-excerpt" x-text="newsletter.summary"></p>
+                                
+                                <footer class="card-meta">
+                                    <span class="card-source" x-text="newsletter.source"></span>
+                                    <div class="card-quality">
+                                        <span class="quality-star">✦</span>
+                                        <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span>
+                                    </div>
+                                </footer>
+                            </div>
+                            
+                            <div class="card-hover-overlay">
+                                <a :href="newsletter.source_url" target="_blank" class="card-action">
+                                    <span>Explore</span>
+                                    <svg class="sanctuary-icon" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </article>
+                    </template>
+                </div>
+                
+                <div x-show="!newsletters.body_wellness || newsletters.body_wellness.length === 0" class="empty-state">
+                    <div class="empty-icon">💪</div>
+                    <p class="empty-text">Your body wellness journey awaits...</p>
+                    <p class="empty-subtext">건강한 활력의 여정을 기다리고 있습니다</p>
+                </div>
             </div>
-            <div x-show="!newsletters.body_wellness || newsletters.body_wellness.length === 0" class="text-center py-8 text-gray-500">
-                아직 몸 웰니스 뉴스레터가 없습니다. 수집 버튼을 눌러주세요! 💪
-            </div>
-        </div>
+        </section>
 
         <!-- 🌿 스파 & 힐링 -->
-        <div class="mb-12">
-            <div class="flex items-center mb-6">
-                <div class="text-3xl mr-3">🌿</div>
-                <div>
-                    <h2 class="text-2xl font-bold text-gray-900">스파 & 힐링</h2>
-                    <p class="text-gray-600">스파, 마사지, 자연치유를 위한 정보</p>
-                </div>
-                <div class="ml-auto bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
-                    <span x-text="newsletters.spa_therapy?.length || 0"></span>개
-                </div>
-            </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-                <template x-for="newsletter in newsletters.spa_therapy" :key="newsletter.id">
-                    <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
-                        <div class="p-4">
-                            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2" x-text="newsletter.title"></h3>
-                            <p class="text-sm text-gray-600 mb-3 line-clamp-3" x-text="newsletter.summary"></p>
-                            <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
-                                <span x-text="newsletter.source"></span>
-                                <span>⭐ <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span></span>
-                            </div>
-                            <a :href="newsletter.source_url" target="_blank" 
-                               class="w-full bg-purple-500 text-white py-2 px-3 rounded text-sm font-medium hover:bg-purple-600 transition-colors block text-center">
-                                자세히 보기 →
-                            </a>
-                        </div>
+        <section class="category-section spa-healing fade-in-up">
+            <div class="category-container">
+                <header class="category-header breathing-element">
+                    <div class="category-icon">🌿</div>
+                    <div class="category-text">
+                        <h2 class="category-title">Spa & Healing</h2>
+                        <p class="category-subtitle">Restoration & Renewal</p>
+                        <p class="category-description">스파, 마사지, 자연치유로 찾는 완전한 재생</p>
                     </div>
-                </template>
+                    <div class="category-badge">
+                        <span x-text="newsletters.spa_therapy?.length || 0"></span>
+                        <span>Experiences</span>
+                    </div>
+                </header>
+                
+                <div class="wellness-grid spa-grid">
+                    <template x-for="newsletter in newsletters.spa_therapy" :key="newsletter.id">
+                        <article class="wellness-card premium-card spa-card">
+                            <div class="card-content">
+                                <h3 class="card-title" x-text="newsletter.title"></h3>
+                                <p class="card-excerpt" x-text="newsletter.summary"></p>
+                                
+                                <footer class="card-meta">
+                                    <span class="card-source" x-text="newsletter.source"></span>
+                                    <div class="card-quality">
+                                        <span class="quality-star">✦</span>
+                                        <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span>
+                                    </div>
+                                </footer>
+                            </div>
+                            
+                            <div class="card-hover-overlay">
+                                <a :href="newsletter.source_url" target="_blank" class="card-action">
+                                    <span>Explore</span>
+                                    <svg class="sanctuary-icon" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </article>
+                    </template>
+                </div>
+                
+                <div x-show="!newsletters.spa_therapy || newsletters.spa_therapy.length === 0" class="empty-state">
+                    <div class="empty-icon">🌿</div>
+                    <p class="empty-text">Your healing sanctuary awaits...</p>
+                    <p class="empty-subtext">치유의 성소가 당신을 기다리고 있습니다</p>
+                </div>
             </div>
-            <div x-show="!newsletters.spa_therapy || newsletters.spa_therapy.length === 0" class="text-center py-8 text-gray-500">
-                아직 스파 & 힐링 뉴스레터가 없습니다. 수집 버튼을 눌러주세요! 🌿
-            </div>
+        </section>
+    </main>
+    
+    <!-- 우아한 푸터 -->
+    <footer class="sanctuary-footer">
+        <div class="footer-content">
+            <p class="footer-text">Wellness Sanctuary © 2025</p>
+            <p class="footer-subtext">Crafted with mindfulness for your well-being</p>
         </div>
-    </div>
+    </footer>
+</div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-function simplePage() {
+function luxuryWellnessSanctuary() {
     return {
         newsletters: {
             mind_wellness: [],
