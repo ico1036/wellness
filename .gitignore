@@ -1,0 +1,85 @@
+# 웰니스 리트리트 뉴스레터 프로젝트 - .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual Environment (uv)
+.venv/
+backend/.venv/
+venv/
+
+# 데이터베이스 파일
+*.db
+*.sqlite
+*.sqlite3
+newsletters.db
+newsletter_db.sqlite
+
+# 로그 파일
+*.log
+logs/
+
+# 환경 변수 파일
+.env
+.env.local
+.env.production
+
+# IDE/편집기
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# 임시 파일
+tmp/
+temp/
+*.tmp
+*.bak
+
+# 테스트 결과
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# 업로드된 파일 (있을 경우)
+uploads/
+media/
+
+# 백업 파일
+*.backup
+backup_*
+
+# 개발 중 임시 스크립트
+debug_*.py
+test_*.py
+temp_*.py
+
+# 컴파일된 정적 파일 (있을 경우)
+static/css/*.css.map
+static/js/*.js.map
+
+# 캐시
+.cache/
+*.cache
+
+# 패키지 관리자 락 파일은 포함 (uv 권장사항)
+# uv.lock 파일은 커밋하는 것이 좋음

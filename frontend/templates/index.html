@@ -1,0 +1,311 @@
+{% extends "base.html" %}
+
+{% block title %}웰니스 리트리트 뉴스레터{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gradient-to-br from-green-50 to-blue-50" x-data="simplePage()">
+    <!-- 헤더 섹션 -->
+    <div class="bg-white shadow-sm border-b">
+        <div class="max-w-6xl mx-auto px-4 py-6">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold text-gray-900 mb-2">
+                    🧘 웰니스 리트리트 뉴스레터
+                </h1>
+                <p class="text-gray-600 mb-6">
+                    마음과 몸의 평화를 찾는 여정, 가장 좋은 웰니스 정보를 한 곳에서
+                </p>
+                
+                <!-- 수집 버튼 -->
+                <button @click="collectNewsletters()" 
+                        :disabled="collecting"
+                        :class="collecting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-600'"
+                        class="bg-green-500 text-white px-8 py-3 rounded-full font-semibold shadow-lg transition-all duration-200 flex items-center space-x-2 mx-auto">
+                    <svg x-show="collecting" class="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <svg x-show="!collecting" class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                    </svg>
+                    <span x-text="collecting ? '새로운 정보 수집중...' : '최신 정보 수집하기'"></span>
+                </button>
+                
+                <!-- 수집 결과 표시 -->
+                <div x-show="collectResult" x-transition class="mt-4 p-3 rounded-lg mx-auto max-w-md" 
+                     :class="collectResult?.success ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'">
+                    <div class="flex items-center justify-center">
+                        <svg x-show="collectResult?.success" class="h-5 w-5 text-green-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        <svg x-show="!collectResult?.success" class="h-5 w-5 text-red-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        <span class="text-sm font-medium" :class="collectResult?.success ? 'text-green-800' : 'text-red-800'" x-text="collectResult?.message"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 통계 섹션 -->
+    <div class="max-w-6xl mx-auto px-4 py-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="text-2xl font-bold text-blue-600" x-text="stats.total || 0"></div>
+                <div class="text-sm text-gray-600">총 뉴스레터</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="text-2xl font-bold text-green-600" x-text="stats.active_sources || 0"></div>
+                <div class="text-sm text-gray-600">활성 소스</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4 text-center">
+                <div class="text-2xl font-bold text-purple-600" x-text="stats.last_updated || '수집 대기중'"></div>
+                <div class="text-sm text-gray-600">마지막 업데이트</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 카테고리별 뉴스레터 섹션 -->
+    <div class="max-w-6xl mx-auto px-4 pb-12">
+        <!-- 🧘 마음 웰니스 -->
+        <div class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="text-3xl mr-3">🧘</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">마음 웰니스</h2>
+                    <p class="text-gray-600">명상, 마인드풀니스, 정신건강을 위한 정보</p>
+                </div>
+                <div class="ml-auto bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+                    <span x-text="newsletters.mind_wellness?.length || 0"></span>개
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                <template x-for="newsletter in newsletters.mind_wellness" :key="newsletter.id">
+                    <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2" x-text="newsletter.title"></h3>
+                            <p class="text-sm text-gray-600 mb-3 line-clamp-3" x-text="newsletter.summary"></p>
+                            <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+                                <span x-text="newsletter.source"></span>
+                                <span>⭐ <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span></span>
+                            </div>
+                            <a :href="newsletter.source_url" target="_blank" 
+                               class="w-full bg-blue-500 text-white py-2 px-3 rounded text-sm font-medium hover:bg-blue-600 transition-colors block text-center">
+                                자세히 보기 →
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div x-show="!newsletters.mind_wellness || newsletters.mind_wellness.length === 0" class="text-center py-8 text-gray-500">
+                아직 마음 웰니스 뉴스레터가 없습니다. 수집 버튼을 눌러주세요! 🧘
+            </div>
+        </div>
+
+        <!-- 💪 몸 웰니스 -->
+        <div class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="text-3xl mr-3">💪</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">몸 웰니스</h2>
+                    <p class="text-gray-600">요가, 운동, 영양 관리를 위한 정보</p>
+                </div>
+                <div class="ml-auto bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+                    <span x-text="newsletters.body_wellness?.length || 0"></span>개
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                <template x-for="newsletter in newsletters.body_wellness" :key="newsletter.id">
+                    <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2" x-text="newsletter.title"></h3>
+                            <p class="text-sm text-gray-600 mb-3 line-clamp-3" x-text="newsletter.summary"></p>
+                            <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+                                <span x-text="newsletter.source"></span>
+                                <span>⭐ <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span></span>
+                            </div>
+                            <a :href="newsletter.source_url" target="_blank" 
+                               class="w-full bg-green-500 text-white py-2 px-3 rounded text-sm font-medium hover:bg-green-600 transition-colors block text-center">
+                                자세히 보기 →
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div x-show="!newsletters.body_wellness || newsletters.body_wellness.length === 0" class="text-center py-8 text-gray-500">
+                아직 몸 웰니스 뉴스레터가 없습니다. 수집 버튼을 눌러주세요! 💪
+            </div>
+        </div>
+
+        <!-- 🌿 스파 & 힐링 -->
+        <div class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="text-3xl mr-3">🌿</div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900">스파 & 힐링</h2>
+                    <p class="text-gray-600">스파, 마사지, 자연치유를 위한 정보</p>
+                </div>
+                <div class="ml-auto bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+                    <span x-text="newsletters.spa_therapy?.length || 0"></span>개
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                <template x-for="newsletter in newsletters.spa_therapy" :key="newsletter.id">
+                    <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-200 overflow-hidden">
+                        <div class="p-4">
+                            <h3 class="font-semibold text-gray-900 mb-2 line-clamp-2" x-text="newsletter.title"></h3>
+                            <p class="text-sm text-gray-600 mb-3 line-clamp-3" x-text="newsletter.summary"></p>
+                            <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+                                <span x-text="newsletter.source"></span>
+                                <span>⭐ <span x-text="newsletter.quality_score?.toFixed(1) || '0.0'"></span></span>
+                            </div>
+                            <a :href="newsletter.source_url" target="_blank" 
+                               class="w-full bg-purple-500 text-white py-2 px-3 rounded text-sm font-medium hover:bg-purple-600 transition-colors block text-center">
+                                자세히 보기 →
+                            </a>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div x-show="!newsletters.spa_therapy || newsletters.spa_therapy.length === 0" class="text-center py-8 text-gray-500">
+                아직 스파 & 힐링 뉴스레터가 없습니다. 수집 버튼을 눌러주세요! 🌿
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function simplePage() {
+    return {
+        newsletters: {
+            mind_wellness: [],
+            body_wellness: [],
+            spa_therapy: []
+        },
+        stats: {
+            total: 0,
+            active_sources: 0,
+            last_updated: null
+        },
+        collecting: false,
+        collectResult: null,
+        
+        async init() {
+            await this.loadNewsletters();
+            await this.loadStats();
+        },
+        
+        async loadNewsletters() {
+            try {
+                // 각 카테고리별로 최신 5개씩 로드
+                const categories = ['mind_wellness', 'body_wellness', 'spa_therapy'];
+                
+                for (const category of categories) {
+                    const response = await fetch(`/api/v1/newsletters/?category=${category}&per_page=5&sort_by=collected_date&sort_order=desc`);
+                    const data = await response.json();
+                    this.newsletters[category] = data.newsletters || [];
+                }
+                
+            } catch (error) {
+                console.error('뉴스레터 로딩 실패:', error);
+            }
+        },
+        
+        async loadStats() {
+            try {
+                const response = await fetch('/api/v1/newsletters/stats/');
+                const data = await response.json();
+                
+                this.stats.total = data.total_newsletters || 0;
+                this.stats.active_sources = data.active_sources || 0;
+                
+                // 마지막 업데이트 시간 (가장 최근 뉴스레터 기준)
+                const allNewsletters = [
+                    ...this.newsletters.mind_wellness,
+                    ...this.newsletters.body_wellness,
+                    ...this.newsletters.spa_therapy
+                ];
+                
+                if (allNewsletters.length > 0) {
+                    const latest = allNewsletters.reduce((latest, newsletter) => {
+                        return new Date(newsletter.collected_date) > new Date(latest.collected_date) ? newsletter : latest;
+                    });
+                    this.stats.last_updated = new Date(latest.collected_date).toLocaleDateString('ko-KR');
+                } else {
+                    this.stats.last_updated = '데이터 없음';
+                }
+                
+            } catch (error) {
+                console.error('통계 로딩 실패:', error);
+            }
+        },
+        
+        async collectNewsletters() {
+            this.collecting = true;
+            this.collectResult = null;
+            
+            try {
+                const response = await fetch('/api/v1/newsletters/collect/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // 성공 메시지 설정
+                this.collectResult = {
+                    success: true,
+                    message: `✅ ${data.result?.newsletters_collected || 0}개의 새로운 정보를 수집했습니다!`
+                };
+                
+                // 3초 후 데이터 새로고침
+                setTimeout(async () => {
+                    await this.loadNewsletters();
+                    await this.loadStats();
+                    this.collectResult = null;
+                }, 3000);
+                
+            } catch (error) {
+                console.error('뉴스레터 수집 실패:', error);
+                this.collectResult = {
+                    success: false,
+                    message: '❌ 수집 중 오류가 발생했습니다'
+                };
+                
+                // 5초 후 에러 메시지 자동 숨김
+                setTimeout(() => {
+                    this.collectResult = null;
+                }, 5000);
+            } finally {
+                this.collecting = false;
+            }
+        }
+    }
+}
+</script>
+
+<style>
+/* 텍스트 줄임 표시 */
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+</style>
+{% endblock %}

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ko" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ app_name }}{% endblock %}</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Alpine.js CDN -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <!-- 커스텀 Tailwind 설정 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        wellness: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            200: '#bbf7d0',
+                            300: '#86efac',
+                            400: '#4ade80',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                            900: '#14532d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- 메타 태그 -->
+    <meta name="description" content="웰니스 리트리트 뉴스레터를 한곳에서 모아보세요">
+    <meta name="keywords" content="웰니스, 리트리트, 힐링, 요가, 명상, 스파">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="{{ app_name }}">
+    <meta property="og:description" content="웰니스 리트리트 뉴스레터를 한곳에서 모아보세요">
+    <meta property="og:type" content="website">
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="h-full bg-gray-50">
+    <!-- 네비게이션 -->
+    <nav class="bg-white shadow-sm border-b border-gray-200" x-data="{ mobileMenuOpen: false }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- 로고 및 메인 네비게이션 -->
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/" class="text-2xl font-bold text-wellness-600 hover:text-wellness-700">
+                            🧘‍♀️ {{ app_name }}
+                        </a>
+                    </div>
+                    <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                        <a href="/" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                            홈
+                        </a>
+                        <a href="/newsletters" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                            뉴스레터
+                        </a>
+                        <a href="#categories" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-2 px-1 border-b-2 font-medium text-sm">
+                            카테고리
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- 검색 및 관리자 링크 -->
+                <div class="hidden sm:ml-6 sm:flex sm:items-center">
+                    <div class="relative" x-data="{ searchOpen: false }">
+                        <button @click="searchOpen = !searchOpen" 
+                                class="p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </button>
+                        
+                        <!-- 검색 드롭다운 -->
+                        <div x-show="searchOpen" 
+                             x-transition
+                             @click.away="searchOpen = false"
+                             class="absolute right-0 mt-2 w-80 bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5">
+                            <div class="p-4">
+                                <input type="text" 
+                                       placeholder="뉴스레터 검색..." 
+                                       class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-wellness-500 focus:border-wellness-500"
+                                       @keyup.enter="window.location.href='/newsletters?query=' + $event.target.value">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <a href="/admin" class="ml-4 text-sm text-gray-500 hover:text-gray-700">
+                        관리자
+                    </a>
+                </div>
+                
+                <!-- 모바일 메뉴 버튼 -->
+                <div class="sm:hidden flex items-center">
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" 
+                            class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 모바일 메뉴 -->
+        <div x-show="mobileMenuOpen" x-transition class="sm:hidden">
+            <div class="pt-2 pb-3 space-y-1">
+                <a href="/" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+                    홈
+                </a>
+                <a href="/newsletters" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+                    뉴스레터
+                </a>
+                <a href="/admin" class="block pl-3 pr-4 py-2 border-l-4 border-transparent text-base font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50">
+                    관리자
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 메인 컨텐츠 -->
+    <main class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- 푸터 -->
+    <footer class="bg-white border-t border-gray-200 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">{{ app_name }}</h3>
+                    <p class="text-gray-600 text-sm">
+                        웰니스 리트리트 관련 뉴스레터를 한곳에서 모아보는 서비스입니다.
+                        몸과 마음의 건강을 위한 다양한 정보를 제공합니다.
+                    </p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">카테고리</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="/newsletters?category=mind_wellness" class="hover:text-wellness-600">마음 웰니스</a></li>
+                        <li><a href="/newsletters?category=body_wellness" class="hover:text-wellness-600">몸 웰니스</a></li>
+                        <li><a href="/newsletters?category=spa_therapy" class="hover:text-wellness-600">스파 테라피</a></li>
+                        <li><a href="/newsletters?category=nutrition" class="hover:text-wellness-600">영양 관리</a></li>
+                        <li><a href="/newsletters?category=nature_healing" class="hover:text-wellness-600">자연 힐링</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">정보</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><a href="/health" class="hover:text-wellness-600">서비스 상태</a></li>
+                        <li><a href="/admin" class="hover:text-wellness-600">관리자</a></li>
+                        <li><a href="mailto:contact@wellness-newsletter.com" class="hover:text-wellness-600">문의하기</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center">
+                <p class="text-sm text-gray-500">
+                    © 2024 {{ app_name }}. 웰니스 리트리트 정보 제공 서비스.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 로딩 인디케이터 -->
+    <div id="loading" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden" x-data="{ show: false }" x-show="show">
+        <div class="flex items-center justify-center h-full">
+            <div class="bg-white rounded-lg p-6">
+                <div class="flex items-center space-x-3">
+                    <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-wellness-600"></div>
+                    <span class="text-gray-700">로딩 중...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 토스트 메시지 -->
+    <div id="toast" 
+         x-data="{ show: false, message: '', type: 'success' }"
+         x-show="show"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0 transform translate-y-2"
+         x-transition:enter-end="opacity-100 transform translate-y-0"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100 transform translate-y-0"
+         x-transition:leave-end="opacity-0 transform translate-y-2"
+         class="fixed top-4 right-4 z-50">
+        <div :class="type === 'success' ? 'bg-green-100 border-green-500 text-green-700' : 'bg-red-100 border-red-500 text-red-700'"
+             class="border-l-4 p-4 rounded-r-lg shadow-lg max-w-sm">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <svg x-show="type === 'success'" class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <svg x-show="type === 'error'" class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium" x-text="message"></p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button @click="show = false" class="inline-flex text-gray-400 hover:text-gray-600">
+                        <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% block extra_js %}{% endblock %}
+
+    <!-- 공통 JavaScript -->
+    <script>
+        // 토스트 메시지 표시 함수
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.__x.$data.message = message;
+            toast.__x.$data.type = type;
+            toast.__x.$data.show = true;
+            
+            setTimeout(() => {
+                toast.__x.$data.show = false;
+            }, 3000);
+        }
+        
+        // 로딩 표시 함수
+        function showLoading() {
+            document.getElementById('loading').__x.$data.show = true;
+        }
+        
+        function hideLoading() {
+            document.getElementById('loading').__x.$data.show = false;
+        }
+        
+        // API 호출 헬퍼
+        async function apiCall(url, options = {}) {
+            showLoading();
+            try {
+                const response = await fetch(url, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...options.headers
+                    },
+                    ...options
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                showToast('요청 처리 중 오류가 발생했습니다.', 'error');
+                throw error;
+            } finally {
+                hideLoading();
+            }
+        }
+    </script>
+</body>
+</html>

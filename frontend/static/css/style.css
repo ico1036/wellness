@@ -1,0 +1,331 @@
+/* 커스텀 CSS 스타일 */
+
+/* 전체 스타일 */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    line-height: 1.6;
+}
+
+/* 웰니스 테마 색상 변수 (Tailwind에서 확장) */
+:root {
+    --color-wellness-50: #f0fdf4;
+    --color-wellness-100: #dcfce7;
+    --color-wellness-200: #bbf7d0;
+    --color-wellness-300: #86efac;
+    --color-wellness-400: #4ade80;
+    --color-wellness-500: #22c55e;
+    --color-wellness-600: #16a34a;
+    --color-wellness-700: #15803d;
+    --color-wellness-800: #166534;
+    --color-wellness-900: #14532d;
+}
+
+/* 스크롤바 스타일링 */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-wellness-400);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--color-wellness-600);
+}
+
+/* 포커스 스타일 개선 */
+.focus\:ring-wellness-500:focus {
+    --tw-ring-color: rgb(34 197 94 / 0.5);
+}
+
+/* 그라데이션 배경 */
+.bg-wellness-gradient {
+    background: linear-gradient(135deg, var(--color-wellness-100) 0%, var(--color-wellness-200) 100%);
+}
+
+/* 카드 호버 효과 */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* 텍스트 트런케이션 */
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.text-truncate-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.text-truncate-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* 로딩 애니메이션 */
+.loading-dots {
+    display: inline-flex;
+    align-items: center;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: loading-dots 1.5s infinite;
+}
+
+@keyframes loading-dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* 펄스 애니메이션 개선 */
+.pulse-wellness {
+    animation: pulse-wellness 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse-wellness {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* 스무스 스크롤 */
+html {
+    scroll-behavior: smooth;
+}
+
+/* 커스텀 체크박스 */
+.custom-checkbox {
+    appearance: none;
+    background-color: #fff;
+    margin: 0;
+    font: inherit;
+    color: var(--color-wellness-600);
+    width: 1.15em;
+    height: 1.15em;
+    border: 2px solid var(--color-wellness-300);
+    border-radius: 0.25em;
+    transform: translateY(-0.075em);
+    display: grid;
+    place-content: center;
+}
+
+.custom-checkbox::before {
+    content: "";
+    width: 0.65em;
+    height: 0.65em;
+    clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em var(--color-wellness-600);
+    background-color: CanvasText;
+}
+
+.custom-checkbox:checked::before {
+    transform: scale(1);
+}
+
+/* 버튼 호버 효과 개선 */
+.btn-wellness {
+    background-color: var(--color-wellness-600);
+    color: white;
+    transition: all 0.3s ease;
+}
+
+.btn-wellness:hover {
+    background-color: var(--color-wellness-700);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.4);
+}
+
+.btn-wellness:active {
+    transform: translateY(0);
+}
+
+/* 카드 스타일 개선 */
+.wellness-card {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #f3f4f6;
+}
+
+.wellness-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--color-wellness-200);
+}
+
+/* 네비게이션 스타일 */
+.nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-wellness-600);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+    width: 100%;
+}
+
+/* 태그 스타일 */
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    border-radius: 9999px;
+    transition: all 0.2s ease;
+}
+
+.tag:hover {
+    transform: scale(1.05);
+}
+
+.tag-wellness {
+    background-color: var(--color-wellness-100);
+    color: var(--color-wellness-800);
+}
+
+.tag-gray {
+    background-color: #f3f4f6;
+    color: #374151;
+}
+
+/* 검색 입력 필드 스타일 */
+.search-input {
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    transform: scale(1.02);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+/* 페이지네이션 스타일 */
+.pagination-btn {
+    transition: all 0.2s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background-color: var(--color-wellness-50);
+    border-color: var(--color-wellness-300);
+}
+
+.pagination-btn.active {
+    background-color: var(--color-wellness-600);
+    border-color: var(--color-wellness-600);
+    color: white;
+}
+
+/* 모바일 반응형 개선 */
+@media (max-width: 768px) {
+    .mobile-padding {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .mobile-text-sm {
+        font-size: 0.875rem;
+    }
+    
+    .mobile-hidden {
+        display: none;
+    }
+}
+
+/* 다크모드 지원 (추후 확장용) */
+@media (prefers-color-scheme: dark) {
+    .dark-mode {
+        --tw-bg-opacity: 1;
+        background-color: rgb(17 24 39 / var(--tw-bg-opacity));
+        color: rgb(243 244 246 / var(--tw-text-opacity));
+    }
+}
+
+/* 프린트 스타일 */
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    .print-break {
+        page-break-after: always;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+}
+
+/* 접근성 개선 */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* 고대비 모드 지원 */
+@media (prefers-contrast: high) {
+    .wellness-card {
+        border: 2px solid #000;
+    }
+    
+    .btn-wellness {
+        border: 2px solid #000;
+    }
+}
+
+/* 움직임 감소 모드 지원 */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
